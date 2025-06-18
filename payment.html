@@ -96,16 +96,40 @@
           return;
         }
         function saveSlip(slipBase64) {
-          let slips = JSON.parse(localStorage.getItem('slips') || '[]');
-          slips.push({
+          let slipFiles = {};
+          try {
+            slipFiles = JSON.parse(localStorage.getItem('slip_files') || '{}');
+          } catch (e) {
+            slipFiles = {};
+          }
+          // สร้าง slipId ตามวันที่และ timestamp
+          const now = new Date();
+          const ymd = now.toISOString().slice(0,10).replace(/-/g, '');
+          const ts = now.getTime();
+          const slipId = `slip_${ymd}_${ts}`;
+          // จำกัด slip ไม่เกิน 10 รายการล่าสุด
+          const keys = Object.keys(slipFiles);
+          if (keys.length >= 10) {
+            // ลบตัวที่เก่าที่สุด
+            const oldest = keys.sort((a,b)=>slipFiles[a].createdAt.localeCompare(slipFiles[b].createdAt))[0];
+            delete slipFiles[oldest];
+          }
+          slipFiles[slipId] = {
+            slipId,
             summary,
             slipBase64: slipBase64 || '',
             userId,
             displayName,
             status: 'pending',
-            createdAt: new Date().toISOString()
-          });
-          localStorage.setItem('slips', JSON.stringify(slips));
+            createdAt: now.toISOString()
+          };
+          try {
+            localStorage.setItem('slip_files', JSON.stringify(slipFiles));
+          } catch (e) {
+            showPopup('พื้นที่จัดเก็บเต็มหรือไฟล์สลิปใหญ่เกินไป กรุณาลบสลิปเก่าหรือเลือกลดขนาดไฟล์สลิป');
+            return false;
+          }
+          return slipId;
         }
         if (!slipFile) {
           showPopup('กรุณาอัปโหลดสลิปโอนเงิน');
@@ -113,9 +137,9 @@
         }
         const reader = new FileReader();
         reader.onload = function(evt) {
-          saveSlip(evt.target.result);
-          // ส่งข้อความสรุปยอดไป LINE แชทลูกค้า
-          if (window.liff && liff.isApiAvailable('sendMessages')) {
+          const slipId = saveSlip(evt.target.result);
+          if (!slipId) return;
+          try {
             liff.sendMessages([
               { type: 'text', text: summary }
             ]).then(() => {
@@ -124,11 +148,11 @@
                 window.location.href = 'receipt.html';
               });
             }).catch(err => {
-              showPopup('แจ้งชำระเงินสำเร็จ แต่ไม่สามารถส่งข้อความไปยังแชท LINE ได้: ' + err.message, function() {
+              showPopup('แจ้งชำระเงินสำเร็จ แต่ไม่สามารถส่งข้อความไปยังแชท LINE ได้: ' + err.message + '\nโปรดเปิดผ่านแชท LINE OA เท่านั้น', function() {
                 window.location.href = 'receipt.html';
               });
             });
-          } else {
+          } catch (e) {
             localStorage.removeItem('cart');
             showPopup('แจ้งชำระเงินสำเร็จ! รอร้านตรวจสอบและยืนยัน', function() {
               window.location.href = 'receipt.html';
