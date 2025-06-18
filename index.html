@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIFF สั่งซื้อสินค้า</title>
+    <title>ร้าน LUCKY KOLOK - สั่งซื้อสินค้า</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div style="text-align:center; margin: 18px 0 0 0; color: #ff8800; font-size: 1.2rem; font-weight: bold; letter-spacing: 1px;">ร้าน LUCKY KOLOK</div>
+    <div id="category-list" style="text-align:center; margin: 18px 0 0 0;"></div>
     <div id="product-list"></div>
-    <h2>ตะกร้าสินค้า</h2>
-    <ul id="cart-list"></ul>
-    <button id="checkout-btn">สั่งซื้อ</button>
+    <button id="goto-cart-btn" style="display:block;margin:0 auto 24px auto;background:#ff8800;color:#fff;border:none;border-radius:8px;padding:10px 30px;font-size:1.1rem;cursor:pointer;position:relative;">ดูตะกร้าสินค้า<span id="cart-badge"></span></button>
     <script src="main.js"></script>
 </body>
 </html>
