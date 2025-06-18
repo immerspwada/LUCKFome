@@ -1,9 +1,9 @@
 // Google Apps Script สำหรับเชื่อม Google Sheet (doPost/doGet)
 // Sheet ID: 14-WYVD5-2XCzH_j_qpSSRij9X1nQ1vrGfPJPe-qZx04
-// Sheet Name: Sheet1 (เปลี่ยนได้ตามที่ใช้งานจริง)
+// Sheet Name: Orders
 
 function doPost(e) {
-  var sheet = SpreadsheetApp.openById('14-WYVD5-2XCzH_j_qpSSRij9X1nQ1vrGfPJPe-qZx04').getSheetByName('Sheet1');
+  var sheet = SpreadsheetApp.openById('14-WYVD5-2XCzH_j_qpSSRij9X1nQ1vrGfPJPe-qZx04').getSheetByName('Orders');
   var data = JSON.parse(e.postData.contents);
   sheet.appendRow([
     new Date(),
@@ -17,7 +17,7 @@ function doPost(e) {
 }
 
 function doGet(e) {
-  var sheet = SpreadsheetApp.openById('14-WYVD5-2XCzH_j_qpSSRij9X1nQ1vrGfPJPe-qZx04').getSheetByName('Sheet1');
+  var sheet = SpreadsheetApp.openById('14-WYVD5-2XCzH_j_qpSSRij9X1nQ1vrGfPJPe-qZx04').getSheetByName('Orders');
   var values = sheet.getDataRange().getValues();
   // แปลงเป็น array of object (header: row[0])
   var headers = values[0];
