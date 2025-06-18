@@ -57,7 +57,8 @@
         cart.forEach(item => {
           summary += `${item.name} x${item.qty} = ${item.price * item.qty} บาท\n`;
         });
-        summary += `รวมทั้งหมด ${cart.reduce((sum, item) => sum + item.price * item.qty, 0)} บาท`;
+        summary += `รวมทั้งหมด ${cart.reduce((sum, item) => sum + item.price * item.qty, 0)} บาท\n`;
+        summary += '\nโอนเข้าบัญชี: มีนรญาณ์ พรหมเพชร\nเลขบัญชี: 720-1-11288-5 (กรุงศรี)';
         // แนบสลิปเป็น base64 (ถ้ามี)
         const slipInput = document.getElementById('slip-input');
         const slipFile = slipInput.files[0];
