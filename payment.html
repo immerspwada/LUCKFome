@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ชำระเงิน</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
     <div style="text-align:center; margin: 18px 0 0 0; color: #ff8800; font-size: 1.2rem; font-weight: bold; letter-spacing: 1px;">ร้าน LUCKY KOLOK</div>
@@ -77,10 +78,22 @@
         const slipFile = slipInput.files[0];
         let userId = '', displayName = '';
         if (window.liff) {
-          await liff.init({ liffId: '2006986568-yjrOkKqm' });
-          const profile = await liff.getProfile();
-          userId = profile.userId || '';
-          displayName = profile.displayName || '';
+          try {
+            await liff.init({ liffId: '2006986568-yjrOkKqm' });
+            if (!liff.isLoggedIn()) {
+              liff.login();
+              return;
+            }
+            const profile = await liff.getProfile();
+            userId = profile.userId || '';
+            displayName = profile.displayName || '';
+          } catch (e) {
+            showPopup('เกิดข้อผิดพลาดในการเชื่อมต่อ LINE LIFF: ' + e.message);
+            return;
+          }
+        } else {
+          showPopup('ไม่สามารถเชื่อมต่อ LINE LIFF ได้ กรุณาเปิดผ่านแอป LINE OA');
+          return;
         }
         function saveSlip(slipBase64) {
           let slips = JSON.parse(localStorage.getItem('slips') || '[]');
