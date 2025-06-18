@@ -4,7 +4,7 @@
 
 function doPost(e) {
   var sheet = SpreadsheetApp.openById('14-WYVD5-2XCzH_j_qpSSRij9X1nQ1vrGfPJPe-qZx04').getSheetByName('Orders');
-  var data = JSON.parse(e.postData.contents);
+  var data = JSON.parse(e.parameter.data);
   sheet.appendRow([
     new Date(),
     data.userId || '',

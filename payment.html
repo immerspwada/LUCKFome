@@ -93,7 +93,7 @@
             return;
           }
         } else {
-          showPopup('ไม่สามารถเชื่อมต่อ LINE LIFF ได้ กรุณาเปิดผ่านแอป LINE OA');
+          showPopup('ไม่อนุญาตให้เปิดหน้านี้บนเบราว์เซอร์ กรุณาเปิดผ่านแอป LINE OA เท่านั้น');
           return;
         }
         if (!slipFile) {
@@ -111,13 +111,13 @@
             createdAt: new Date().toISOString(),
             status: 'pending'
           };
-          // ส่งข้อมูลไป Google Apps Script Web API
+          // ส่งข้อมูลไป Google Apps Script Web API (แก้ไขให้เป็น form-data เพื่อหลบ CORS)
           try {
-            const url = 'https://script.google.com/macros/s/AKfycbwhaWIN08NCOcbvp0RESyYY3llujefw4H3lzlAaaVvQNN4uBjhK_C3HuAQiY24RuADn/exec';
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(orderData));
             const res = await fetch(GOOGLE_APPS_SCRIPT_URL, {
               method: 'POST',
-              body: JSON.stringify(orderData),
-              headers: { 'Content-Type': 'application/json' }
+              body: formData
             });
             const result = await res.json();
             if (result.result === 'success') {
