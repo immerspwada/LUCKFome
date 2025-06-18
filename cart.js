@@ -10,11 +10,15 @@ function renderCart() {
     list.innerHTML = '';
     cart.forEach((item, idx) => {
         const li = document.createElement('li');
+        let qtyText = item.qty;
+        if (item.key && item.key.startsWith('น้ำดื่ม')) {
+            qtyText = item.qty + ' โหล';
+        }
         li.innerHTML = `
-            <span class="cart-item-name">${item.name}</span>
+            <span class="cart-item-name">${item.name}${item.size ? ' ('+item.size+')' : ''}</span>
             <span class="cart-item-controls">
                 <button class="cart-item-btn" onclick="changeQty(${idx}, -1)">-</button>
-                <span>${item.qty}</span>
+                <span>${qtyText}</span>
                 <button class="cart-item-btn" onclick="changeQty(${idx}, 1)">+</button>
                 <button class="cart-item-btn" onclick="removeItem(${idx})">ลบ</button>
             </span>
@@ -50,3 +54,17 @@ document.getElementById('back-btn').onclick = function() {
     window.location.href = 'index.html';
 };
 renderCart();
+
+// --- LINE LIFF: แสดงโปรไฟล์ผู้ใช้ ---
+if (window.liff) {
+    liff.init({ liffId: '2006986568-yjrOkKqm' }).then(() => {
+        if (liff.isLoggedIn()) {
+            liff.getProfile().then(profile => {
+                const profileDiv = document.getElementById('line-profile');
+                profileDiv.innerHTML = `<img src="${profile.pictureUrl}" alt="profile" style="width:56px;height:56px;border-radius:50%;box-shadow:0 2px 8px #ff880033;vertical-align:middle;"> <span style='font-size:1.05rem;font-weight:500;margin-left:8px;'>${profile.displayName}</span>`;
+            });
+        } else {
+            liff.login();
+        }
+    });
+}

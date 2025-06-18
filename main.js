@@ -111,6 +111,10 @@ function renderProducts() {
                     <input id="water-qty" type="number" min="1" value="10" class="product-input">
                   </label>
                   <span id="water-price" class="product-price"></span>
+                  <div class="water-rate-table" style="font-size:0.98rem;margin-top:6px;color:#666;background:#fffbe7;padding:6px 8px;border-radius:7px;">
+                    <b>เรทราคา:</b><br>
+                    <span id="water-rate-detail"></span>
+                  </div>
                 </div>
                 <button id="add-water-btn" class="product-btn">เพิ่มลงตะกร้า</button>
             `;
@@ -118,17 +122,39 @@ function renderProducts() {
                 const sizeSel = card.querySelector('#water-size');
                 const qtyInput = card.querySelector('#water-qty');
                 const priceSpan = card.querySelector('#water-price');
+                const rateDetail = card.querySelector('#water-rate-detail');
+                function showRateDetail(size) {
+                  let txt = '';
+                  if (size === '820ML') txt = '10 โหล 36 บาท | 50 โหล 34 บาท | 100 โหล 32 บาท';
+                  else if (size === '600ML') txt = '1-9 โหล 42 บาท | 100 โหล 40 บาท';
+                  else if (size === '350ML') txt = '10 โหล 35 บาท | 50 โหล 33 บาท | 100 โหล 32 บาท';
+                  rateDetail.textContent = txt;
+                }
+                function getMinQty(size) {
+                  return 10; // ทุกขนาดน้ำดื่มขั้นต่ำ 10 โหล
+                }
                 function updatePrice() {
                     const size = sizeSel.value;
                     const qty = parseInt(qtyInput.value) || 1;
                     const price = getWaterPrice(size, qty);
                     priceSpan.textContent = `ราคา ${price} บาท/โหล`;
+                    showRateDetail(size);
+                    qtyInput.min = getMinQty(size);
                 }
-                sizeSel.onchange = qtyInput.oninput = updatePrice;
+                sizeSel.onchange = function() {
+                  updatePrice();
+                  qtyInput.value = getMinQty(sizeSel.value);
+                };
+                qtyInput.oninput = updatePrice;
                 updatePrice();
                 card.querySelector('#add-water-btn').onclick = function() {
                     const size = sizeSel.value;
                     const qty = parseInt(qtyInput.value) || 1;
+                    const minQty = getMinQty(size);
+                    if (qty < minQty) {
+                        alert(`ขั้นต่ำ ${minQty} โหล สำหรับขนาด ${size}`);
+                        return;
+                    }
                     const price = getWaterPrice(size, qty);
                     addCustomWaterToCart(size, qty, price);
                     renderProducts(); // refresh badge
@@ -173,12 +199,12 @@ function renderProducts() {
 
 function addCustomWaterToCart(size, qty, price) {
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const key = `น้ำดื่ม ${size} ${qty} โหล`;
-    const found = cart.find(item => item.key === key);
+    const key = `น้ำดื่ม ${size}`;
+    const found = cart.find(item => item.key === key && item.size === size);
     if (found) {
-        found.qty++;
+        found.qty += qty; // เพิ่มจำนวนโหลจริง
     } else {
-        cart.push({ key, name: `น้ำดื่ม ${size} (${qty} โหล)`, price, qty: 1 });
+        cart.push({ key, name: `น้ำดื่ม ${size}`, size, price, qty });
     }
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartBadge();
