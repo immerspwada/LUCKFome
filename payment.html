@@ -75,11 +75,12 @@
         summary += '\nโอนเข้าบัญชี: มีนรญาณ์ พรหมเพชร\nเลขบัญชี: 720-1-11288-5 (กรุงศรี)';
         const slipInput = document.getElementById('slip-input');
         const slipFile = slipInput.files[0];
-        let userId = '';
+        let userId = '', displayName = '';
         if (window.liff) {
           await liff.init({ liffId: '2006986568-yjrOkKqm' });
           const profile = await liff.getProfile();
           userId = profile.userId || '';
+          displayName = profile.displayName || '';
         }
         function saveSlip(slipBase64) {
           let slips = JSON.parse(localStorage.getItem('slips') || '[]');
@@ -87,11 +88,26 @@
             summary,
             slipBase64: slipBase64 || '',
             userId,
+            displayName,
             status: 'pending',
             createdAt: new Date().toISOString()
           });
           localStorage.setItem('slips', JSON.stringify(slips));
         }
-            // (Optional) Add further logic here if needed, or remove this line if not required.
-          };
+        if (!slipFile) {
+          showPopup('กรุณาอัปโหลดสลิปโอนเงิน');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          saveSlip(evt.target.result);
+          localStorage.removeItem('cart');
+          showPopup('แจ้งชำระเงินสำเร็จ! รอร้านตรวจสอบและยืนยัน', function() {
+            window.location.href = 'receipt.html';
+          });
+        };
+        reader.readAsDataURL(slipFile);
+      };
         </script>
+</body>
+</html>

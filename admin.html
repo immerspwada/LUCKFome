@@ -10,7 +10,19 @@
     <div style="text-align:center; margin: 18px 0 0 0; color: #ff8800; font-size: 1.2rem; font-weight: bold; letter-spacing: 1px;">Admin - LUCKY KOLOK</div>
     <h2>แก้ไขราคาสินค้า</h2>
     <div id="product-admin-list"></div>
-    <h2 style="margin-top:36px;">รายการสลิปที่ลูกค้าแจ้ง</h2>
+    <h2 style="margin-top:36px;">รายการออเดอร์/สลิปที่ลูกค้าแจ้ง</h2>
+    <div style="margin-bottom:18px;">
+        <label>กรองสถานะ: 
+            <select id="order-status-filter" style="padding:4px 12px;border-radius:6px;">
+                <option value="all">ทั้งหมด</option>
+                <option value="pending">รอการยืนยัน</option>
+                <option value="accepted">รับออเดอร์แล้ว</option>
+                <option value="delivering">กำลังจัดส่ง</option>
+                <option value="done">สำเร็จ</option>
+                <option value="cancelled">ยกเลิก</option>
+            </select>
+        </label>
+    </div>
     <div id="slip-list"></div>
     <script src="admin.js"></script>
 </body>
