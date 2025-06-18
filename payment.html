@@ -6,6 +6,7 @@
     <title>ชำระเงิน</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="config.js"></script>
 </head>
 <body>
     <div style="text-align:center; margin: 18px 0 0 0; color: #ff8800; font-size: 1.2rem; font-weight: bold; letter-spacing: 1px;">ร้าน LUCKY KOLOK</div>
@@ -113,7 +114,7 @@
           // ส่งข้อมูลไป Google Apps Script Web API
           try {
             const url = 'https://script.google.com/macros/s/AKfycbwhaWIN08NCOcbvp0RESyYY3llujefw4H3lzlAaaVvQNN4uBjhK_C3HuAQiY24RuADn/exec';
-            const res = await fetch(url, {
+            const res = await fetch(GOOGLE_APPS_SCRIPT_URL, {
               method: 'POST',
               body: JSON.stringify(orderData),
               headers: { 'Content-Type': 'application/json' }
