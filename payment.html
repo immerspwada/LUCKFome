@@ -106,7 +106,9 @@
             userId,
             displayName,
             summary,
-            slipBase64: evt.target.result // หรือจะส่ง slipUrl ถ้ามีระบบ upload จริง
+            slipBase64: evt.target.result, // หรือจะส่ง slipUrl ถ้ามีระบบ upload จริง
+            createdAt: new Date().toISOString(),
+            status: 'pending'
           };
           // ส่งข้อมูลไป Google Apps Script Web API
           try {
