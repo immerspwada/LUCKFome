@@ -114,10 +114,26 @@
         const reader = new FileReader();
         reader.onload = function(evt) {
           saveSlip(evt.target.result);
-          localStorage.removeItem('cart');
-          showPopup('แจ้งชำระเงินสำเร็จ! รอร้านตรวจสอบและยืนยัน', function() {
-            window.location.href = 'receipt.html';
-          });
+          // ส่งข้อความสรุปยอดไป LINE แชทลูกค้า
+          if (window.liff && liff.isApiAvailable('sendMessages')) {
+            liff.sendMessages([
+              { type: 'text', text: summary }
+            ]).then(() => {
+              localStorage.removeItem('cart');
+              showPopup('แจ้งชำระเงินสำเร็จ! ระบบได้ส่งสรุปยอดไปยังแชทของคุณแล้ว รอร้านตรวจสอบและยืนยัน', function() {
+                window.location.href = 'receipt.html';
+              });
+            }).catch(err => {
+              showPopup('แจ้งชำระเงินสำเร็จ แต่ไม่สามารถส่งข้อความไปยังแชท LINE ได้: ' + err.message, function() {
+                window.location.href = 'receipt.html';
+              });
+            });
+          } else {
+            localStorage.removeItem('cart');
+            showPopup('แจ้งชำระเงินสำเร็จ! รอร้านตรวจสอบและยืนยัน', function() {
+              window.location.href = 'receipt.html';
+            });
+          }
         };
         reader.readAsDataURL(slipFile);
       };
