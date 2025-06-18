@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ใบเสร็จรับเงิน - ร้าน LUCKY KOLOK</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+      .receipt-box {
+        max-width: 420px;
+        margin: 32px auto;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(255,136,0,0.10);
+        padding: 24px 18px 18px 18px;
+        font-size: 1.08rem;
+        color: #222;
+      }
+      .receipt-header {
+        text-align: center;
+        color: #ff8800;
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+      .receipt-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 18px 0 12px 0;
+      }
+      .receipt-table th, .receipt-table td {
+        border-bottom: 1px solid #ffe0b2;
+        padding: 6px 4px;
+        text-align: left;
+      }
+      .receipt-table th {
+        background: #fffbe7;
+        color: #ff8800;
+        font-weight: 600;
+      }
+      .receipt-total {
+        text-align: right;
+        font-size: 1.15rem;
+        color: #ff8800;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+      .receipt-footer {
+        text-align: center;
+        margin-top: 18px;
+        color: #888;
+        font-size: 1.02rem;
+      }
+      @media (max-width: 600px) {
+        .receipt-box { max-width: 98vw; padding: 12px 2vw; }
+        .receipt-header { font-size: 1.1rem; }
+      }
+    </style>
+</head>
+<body>
+  <div class="receipt-box">
+    <div class="receipt-header">ร้าน LUCKY KOLOK<br>ใบเสร็จรับเงิน</div>
+    <div id="receipt-date" style="text-align:right;font-size:0.98rem;color:#888;"></div>
+    <div id="receipt-orderid" style="text-align:right;font-size:0.98rem;color:#888;"></div>
+    <table class="receipt-table">
+      <thead>
+        <tr><th>สินค้า</th><th>จำนวน</th><th>ราคา/หน่วย</th><th>รวม</th></tr>
+      </thead>
+      <tbody id="receipt-items"></tbody>
+    </table>
+    <div class="receipt-total" id="receipt-total"></div>
+    <div class="receipt-footer">
+      ขอบคุณที่อุดหนุน<br>Thank you for your purchase<br>
+      <span style="font-size:0.95rem;">ติดต่อร้าน: 080-xxx-xxxx</span>
+    </div>
+  </div>
+  <script src="receipt.js"></script>
+</body>
+</html>
